@@ -1,0 +1,18 @@
+
+meta:
+  project: elastistack
+
+mount=source:
+  bind: .
+  path: /go/src/github.com/estesp/elastistack
+
+image=builder:
+  image: elastistack-dev
+  context: dobifiles/
+  dockerfile: Dockerfile.build
+
+job=shell:
+  use: builder
+  interactive: true
+  mounts: [source]
+  command: sh

@@ -48,3 +48,5 @@ elastistack
 *.log
 volumes/elasticsearch/*
 !volumes/elasticsearch/readme.txt
+
+.dobi
