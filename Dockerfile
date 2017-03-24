@@ -9,6 +9,7 @@ ENV GOPATH /go:$GOPROJ/Godeps/_workspace
 WORKDIR $GOPROJ
 COPY . $GOPROJ
 
+ENV CGO_ENABLED 0
 RUN go build -o /go/bin/elastistack .
 
 ENTRYPOINT [ "elastistack" ]

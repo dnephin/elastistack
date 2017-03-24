@@ -18,6 +18,7 @@ import (
 	"fmt"
 	"os"
 	"time"
+	"bytes"
 
 	log "github.com/Sirupsen/logrus"
 	"github.com/estesp/elastistack/goroutine"
@@ -63,11 +64,14 @@ trace data into Elasticsearch for further analysis.`,
 		}
 		defer f.Close()
 
-		routines, err := stack.ParseDump(f, nil)
+		buffer := bytes.Buffer{}
+		routines, err := stack.ParseDump(f, &buffer)
 		if err != nil {
 			log.Errorf("Error trying to parse dump: %v", err)
 			return err
 		}
+
+		log.Infof("Parsed %s goroutines", len(routines))
 		bulkIndexer.Start()
 		defer esConn.Close()
 		defer bulkIndexer.Stop()

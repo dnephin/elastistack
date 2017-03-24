@@ -11,7 +11,6 @@ package stack
 import (
 	"bufio"
 	"bytes"
-	"errors"
 	"fmt"
 	"io"
 	"math"
@@ -25,6 +24,8 @@ import (
 	"strings"
 	"unicode"
 	"unicode/utf8"
+
+	"github.com/pkg/errors"
 )
 
 const lockedToThread = "locked to thread"
@@ -734,7 +735,8 @@ func ParseDump(r io.Reader, out io.Writer) ([]Goroutine, error) {
 
 				if match := reFunc.FindStringSubmatch(line); match != nil {
 					args := Args{}
-					for _, a := range strings.Split(match[2], ", ") {
+					for _, a := range strings.Split(match[2], ",") {
+						a = strings.TrimSpace(a)
 						if a == "..." {
 							args.Elided = true
 							continue
@@ -745,7 +747,7 @@ func ParseDump(r io.Reader, out io.Writer) ([]Goroutine, error) {
 						}
 						v, err := strconv.ParseUint(a, 0, 64)
 						if err != nil {
-							return goroutines, fmt.Errorf("failed to parse int on line: \"%s\"", line)
+							return goroutines, errors.Wrapf(err, "failed to parse int on function line: \"%s\"", line)
 						}
 						args.Values = append(args.Values, Arg{Value: v})
 					}

@@ -35,6 +35,8 @@ instance.
 The parsing code will ignore non-stack trace content in the input
 file, so there is no need to clean up a larger logfile or standard
 output that includes both a Go stack trace as well as other data.`,
+	SilenceErrors: false,
+	SilenceUsage: false,
 }
 
 // Execute adds all child commands to the root command sets flags appropriately.
